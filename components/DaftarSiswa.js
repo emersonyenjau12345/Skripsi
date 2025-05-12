@@ -27,7 +27,7 @@ const WorkPartnerDashboard = () => {
           <View style={styles.menuContainer}>
             <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('SelectedJobsScreen')}>
               <Icon name="users" size={24} color="#4CAF50" />
-              <Text style={styles.menuText}>Daftar Mahasiswa</Text>
+              <Text style={styles.menuText}>Daftar Pekerjaan</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('EditStudentScreen')}>
@@ -37,7 +37,7 @@ const WorkPartnerDashboard = () => {
 
             <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('StudentJobOfferScreen')}>
               <Icon name="building" size={24} color="#4CAF50" />
-              <Text style={styles.menuText}>Tempat Kerja</Text>
+              <Text style={styles.menuText}>Tambah Pekerjaan</Text>
             </TouchableOpacity>
           </View>
         </View>

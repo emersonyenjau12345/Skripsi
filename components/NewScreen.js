@@ -54,17 +54,17 @@ const AddPihakKerjaScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tambah Pihak Kerja</Text>
+      <Text style={styles.title}>Add Working Party</Text>
       <View style={styles.formContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Nama Pihak Kerja"
+          placeholder="Name of Working Party"
           value={name}
           onChangeText={setName}
         />
         <TextInput
           style={styles.input}
-          placeholder="Email Pihak Kerja"
+          placeholder="Work Party Email"
           value={email}
           onChangeText={setEmail}
           autoCapitalize="none"
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fafafa',
   },
   addButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#800080',
     paddingVertical: 14,
     borderRadius: 8,
     width: '100%',

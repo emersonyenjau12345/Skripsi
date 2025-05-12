@@ -23,6 +23,7 @@ import DaftarSiswa from "./components/DaftarSiswa";
 import SelectedJobsScreen from "./components/SelectedJobsScreen";
 import StudentJobOfferScreen from "./components/StudentJobOfferScreen";
 import NewScreen from "./components/NewScreen";
+import Kontak from "./components/Kontak";
 
 const Stack = createStackNavigator();
 
@@ -51,6 +52,7 @@ export default function App() {
              <Stack.Screen name="SelectedJobsScreen" component={SelectedJobsScreen} />
              <Stack.Screen name="StudentJobOfferScreen" component={StudentJobOfferScreen} />
                <Stack.Screen name="NewScreen" component={NewScreen} />
+               <Stack.Screen name="Kontak" component={Kontak} />
       </Stack.Navigator>
     </NavigationContainer>
   );

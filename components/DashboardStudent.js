@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   Image,
   StyleSheet,
   Dimensions,
+  Animated
 } from "react-native";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -16,11 +17,29 @@ const DashboardStudent = () => {
   const navigation = useNavigation();
   const auth = getAuth();
   const db = getFirestore();
+  const scrollAnim = useRef(new Animated.Value(0)).current;
 
   const [name, setName] = useState("Loading...");
   const [email, setEmail] = useState("Loading...");
 
   useEffect(() => {
+    // Start the text animation
+    const animation = Animated.loop(
+      Animated.sequence([
+        Animated.timing(scrollAnim, {
+          toValue: 1,
+          duration: 10000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scrollAnim, {
+          toValue: 0,
+          duration: 0,
+          useNativeDriver: true,
+        })
+      ])
+    );
+    animation.start();
+
     const fetchUserData = async () => {
       const user = auth.currentUser;
       if (user) {
@@ -71,7 +90,16 @@ const DashboardStudent = () => {
 
     fetchUserData();
     deleteOldHistory();
+
+    return () => {
+      animation.stop();
+    };
   }, []);
+
+  const translateX = scrollAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-200, 200]
+  });
 
   return (
     <View style={styles.container}>
@@ -133,6 +161,20 @@ const DashboardStudent = () => {
           <Text style={styles.menuText}>Close</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Auto-scrolling text */}
+      <View style={styles.marqueeContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate('Kontak')}>
+          <Animated.Text 
+            style={[
+              styles.kontakText,
+              { transform: [{ translateX }] }
+            ]}
+          >
+            Lihat Kontak Village Dean
+          </Animated.Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -141,7 +183,7 @@ const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "	#9370DB",
+    backgroundColor: "#f5f5f5",
     alignItems: "center",
   },
   profileContainer: {
@@ -189,6 +231,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     textAlign: "center",
+  },
+  marqueeContainer: {
+    height: 40,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  kontakText: {
+    color: '#9400D3',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textDecorationLine: 'underline',
+    padding: 10,
   },
 });
 
