@@ -342,91 +342,141 @@ return (
 
 {activeTab === "approvePoints" && (
   <View>
-    <View style={styles.tableHeader}>
-      <Text style={[styles.headerCell, { paddingHorizontal: 40 }]}>Name</Text>
-      <Text style={[styles.headerCell, { paddingHorizontal: 20 }]}>Nim</Text>
-      <Text style={[styles.headerCell, { paddingHorizontal: 20 }]}>Working hours</Text>
-      <Text style={[styles.headerCell, { paddingHorizontal: 20 }]}>Student Point</Text>
-      <Text style={[styles.headerCell, { paddingHorizontal: 20 }]}>Description caption</Text>
-      <Text style={[styles.headerCell, { paddingHorizontal: 10 }]}>Action</Text>
-    </View>
-
-    <ScrollView style={styles.tableBody}>
-      <FlatList
-        data={filteredUsers}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => {
-          const points = parseInt(item.Points) || 0;
-          const hasImage = item.imageUrl && item.imageUrl.trim() !== "";
-
-         // Split description by spaces to create word array
-        const descriptionWords = item.description ? item.description.split(' ') : [];
-
-        // Split into chunks of 20 words
-        const descriptionChunks = [];
-        for (let i = 0; i < descriptionWords.length; i += 15) {
-          descriptionChunks.push(descriptionWords.slice(i, i + 15).join(' '));
-        }
-
-
-          return (
-            
-            <View style={styles.tableRow}>
-        {/* Ganti kolom No dengan icon user */}
-        <View style={styles.iconCell}>
-        <FontAwesome5 name="user" size={20} color="rgb(119, 49, 102)" />
-
+    {/* Header */}
+    <ScrollView horizontal style={styles.tableBody}>
+      <View>
+        <View style={styles.tableHeader}>
+          <View style={[styles.headerCell, { width: 60, alignItems: 'center', justifyContent: 'center' }]}>
+            <Text style={styles.headerText}></Text>
+          </View>
+          <View style={[styles.headerCell, { width: 120, alignItems: 'center', justifyContent: 'center' }]}>
+            <Text style={styles.headerText}>Name</Text>
+          </View>
+          <View style={[styles.headerCell, { width: 100, alignItems: 'center', justifyContent: 'center' }]}>
+            <Text style={styles.headerText}>Nim</Text>
+          </View>
+          <View style={[styles.headerCell, { width: 100, alignItems: 'center', justifyContent: 'center' }]}>
+            <Text style={styles.headerText}>Points</Text>
+          </View>
+          <View style={[styles.headerCell, { width: 180, alignItems: 'center', justifyContent: 'center' }]}>
+            <Text style={styles.headerText}>Description</Text>
+          </View>
+          <View style={[styles.headerCell, { width: 180, alignItems: 'center', justifyContent: 'center' }]}>
+            <Text style={styles.headerText}>Location</Text>
+          </View>
+          <View style={[styles.headerCell, { width: 180, alignItems: 'center', justifyContent: 'center' }]}>
+            <Text style={styles.headerText}>Date & Time</Text>
+          </View>
+          <View style={[styles.headerCell, { width: 100, alignItems: 'center', justifyContent: 'center' }]}>
+            <Text style={styles.headerText}>Action</Text>
+          </View>
         </View>
-              <Text style={styles.tableCell}>{item.Name}</Text>
-              <Text style={styles.tableCell}>{item.Nim}</Text>
-              <Text style={styles.tableCell}>{item.Jam}</Text>
-              <Text style={styles.tableCell}>{points}</Text>
 
-               {/* Menampilkan keterangan dengan pemisahan otomatis setiap 20 kata */}
-            <View style={styles.tableCell}>
-              {descriptionChunks.map((chunk, index) => (
-                <Text key={index}>{chunk}</Text>
-              ))}
-              
-            </View>
+        {/* Table Body */}
+        <FlatList
+          data={filteredUsers}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => {
+            const points = parseInt(item.Points) || 0;
+            const hasImage = item.imageUrl && item.imageUrl.trim() !== "";
 
-              <View style={styles.iconContainer}>
-                <TouchableOpacity onPress={() => approvePoints(item.id, points, item.imageUrl)}>
-                  <FontAwesome5
-                    name={points === 0 ? "check-circle" : "times-circle"}
-                    size={20}
-                    color={points === 0 ? "green" : "red"}
-                  />
-                </TouchableOpacity>
+            const descriptionWords = item.description ? item.description.split(' ') : [];
+            const descriptionChunks = [];
+            for (let i = 0; i < descriptionWords.length; i += 15) {
+              descriptionChunks.push(descriptionWords.slice(i, i + 15).join(' '));
+            }
 
-                <TouchableOpacity onPress={() => openImage(item.imageUrl)}>
-  <FontAwesome5
-    name="image"
-    size={20}
-    color={item.imageUrl ? "green" : "blue"}
-  />
-</TouchableOpacity>
+            const formattedTime = item.Timestamp && item.Timestamp.toDate
+              ? new Intl.DateTimeFormat('id-ID', {
+                  timeZone: 'Asia/Makassar',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit',
+                }).format(item.Timestamp.toDate())
+              : "";
 
-<TouchableOpacity onPress={() => approveImage(item.id, item.Email)}>
-  <FontAwesome5
-    name="thumbs-up"
-    size={20}
-    color={item.ImageApproved && points === 0 && hasImage ? "green" : "gray"}
-  />
-</TouchableOpacity>
+            const formattedLocation = item.Location?.split(',').slice(1).join(',').trim() || '';
 
+            return (
+              <View style={styles.tableRow}>
+                {/* Icon User */}
+                <View style={[styles.tableCell, { width: 60, alignItems: 'center', justifyContent: 'center' }]}>
+                  <FontAwesome5 name="user" size={20} color="rgb(119, 49, 102)" />
+                </View>
 
+                {/* Name */}
+                <View style={[styles.tableCell, { width: 120, alignItems: 'center', justifyContent: 'center' }]}>
+                  <Text>{item.Name}</Text>
+                </View>
 
-                
+                {/* Nim */}
+                <View style={[styles.tableCell, { width: 100, alignItems: 'center', justifyContent: 'center' }]}>
+                  <Text>{item.Nim}</Text>
+                </View>
+
+                {/* Points */}
+                <View style={[styles.tableCell, { width: 100, alignItems: 'center', justifyContent: 'center' }]}>
+                  <Text>{points}</Text>
+                </View>
+
+                {/* Description */}
+                <View style={[styles.tableCell, { width: 180, alignItems: 'center', justifyContent: 'center' }]}>
+                  {descriptionChunks.map((chunk, index) => (
+                    <Text key={index} style={{ marginBottom: 4, textAlign: 'center' }}>{chunk}</Text>
+                  ))}
+                </View>
+
+                {/* Location */}
+                <View style={[styles.tableCell, { width: 180, alignItems: 'center', justifyContent: 'center' }]}>
+                  <Text style={{ fontStyle: 'italic', color: '#333', textAlign: 'center' }}>
+                    {formattedLocation}
+                  </Text>
+                </View>
+
+                {/* Date & Time */}
+                <View style={[styles.tableCell, { width: 180, alignItems: 'center', justifyContent: 'center' }]}>
+                  <Text style={{ fontWeight: 'bold', color: '#333', textAlign: 'center' }}>
+                    {formattedTime}
+                  </Text>
+                </View>
+
+                {/* Action Buttons */}
+                <View style={[styles.tableCell, { width: 100, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }]}>
+                  <TouchableOpacity onPress={() => approvePoints(item.id, points, item.imageUrl)}>
+                    <FontAwesome5
+                      name={points === 0 ? "check-circle" : "times-circle"}
+                      size={20}
+                      color={points === 0 ? "green" : "red"}
+                    />
+                  </TouchableOpacity>
+
+                  <TouchableOpacity onPress={() => openImage(item.imageUrl)}>
+                    <FontAwesome5
+                      name="image"
+                      size={20}
+                      color={item.imageUrl ? "green" : "blue"}
+                    />
+                  </TouchableOpacity>
+
+                  <TouchableOpacity onPress={() => approveImage(item.id, item.Email)}>
+                    <FontAwesome5
+                      name="thumbs-up"
+                      size={20}
+                      color={item.ImageApproved && points === 0 && hasImage ? "green" : "gray"}
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          );
-        }}
-      />
+            );
+          }}
+        />
+      </View>
     </ScrollView>
   </View>
 )}
-
 
 
 {activeTab === "editPoints" && (
